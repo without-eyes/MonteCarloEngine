@@ -13,13 +13,18 @@ public:
         const uint8_t threadCount = std::thread::hardware_concurrency();
         uint64_t trialsPerThread = trials / threadCount;
         std::vector<std::thread> threads;
-        std::vector results(threadCount, 0.0);
+
+        struct alignas(64) PaddedDouble {
+            double val;
+            char padding[64 - sizeof(double)];
+        };
+        std::vector<PaddedDouble> results(threadCount, { 0.0 });
 
         for (uint8_t i = 0; i < threadCount; i++) {
             threads.emplace_back([&, i] {
                 Experiment localExperiment(trialsPerThread, precision);
                 for (uint64_t j = 0; j < trialsPerThread; j++) {
-                    results[i] += localExperiment.run();
+                    results[i].val += localExperiment.run();
                 }
             });
         }
@@ -28,7 +33,9 @@ public:
             thread.join();
         }
 
-        double result = std::accumulate(results.begin(), results.end(), 0.0);
+        double result = std::accumulate(results.begin(), results.end(), 0.0, [](double sum, const PaddedDouble& pd) {
+            return sum + pd.val;
+        });
         return result / trials;
     }
 
