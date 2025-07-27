@@ -10,7 +10,7 @@ public:
     explicit MonteCarloEngine(uint64_t trials, double precision) : trials(trials), precision(precision) {}
 
     double run() {
-        const uint8_t threadCount = std::thread::hardware_concurrency();
+        uint64_t threadCount = std::thread::hardware_concurrency();
         uint64_t trialsPerThread = trials / threadCount;
         std::vector<std::thread> threads;
 
