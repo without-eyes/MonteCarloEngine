@@ -6,4 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(MonteCarloEngine src/main.cpp
         include/MonteCarloEngine.h
         src/PiCalculation.cpp
-        include/PiCalculation.h)
+        include/PiCalculation.h
+        include/RandomPointGenerator.h
+        src/RandomPointGenerator.cpp
+)
