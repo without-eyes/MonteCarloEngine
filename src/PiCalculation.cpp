@@ -22,7 +22,7 @@ double PiCalculation::run() {
     return 4.0 * pointsInsideCircle / totalPoints;
 }
 
-bool PiCalculation::is_point_inside_circle(double x, double y, double cx, double cy, double radius) {
+inline bool PiCalculation::is_point_inside_circle(double x, double y, double cx, double cy, double radius) {
     double dx = x - cx;
     double dy = y - cy;
     return dx * dx + dy * dy <= radius * radius;
